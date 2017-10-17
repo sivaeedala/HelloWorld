@@ -1,0 +1,10 @@
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\bin\Release\BusinessAccess.dll
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\bin\Release\BusinessAccess.pdb
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\bin\Release\DataAccess.dll
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\bin\Release\MySql.Data.dll
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\bin\Release\DataAccess.pdb
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\bin\Release\MySql.Data.xml
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\obj\Release\BusinessAccess.csprojResolveAssemblyReference.cache
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\obj\Release\BusinessAccess.csproj.CoreCompileInputs.cache
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\obj\Release\BusinessAccess.dll
+C:\Projects\Free_Lancing\Radical Courier\BusinessAccess\obj\Release\BusinessAccess.pdb
