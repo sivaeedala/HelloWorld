@@ -1,0 +1,7 @@
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\bin\Release\DataAccess.dll
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\bin\Release\DataAccess.pdb
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\bin\Release\MySql.Data.dll
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\bin\Release\MySql.Data.xml
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\obj\Release\DataAccess.csproj.CoreCompileInputs.cache
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\obj\Release\DataAccess.dll
+C:\Projects\Free_Lancing\Radical Courier\DataAccess\obj\Release\DataAccess.pdb
