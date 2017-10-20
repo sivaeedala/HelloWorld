@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,20 +34,12 @@ namespace BusinessAccess
             }
         }
 
-        public void Approve(int id, string userName)
+        public string Approve(int id, string userName)
         {
-            int intApprv = 0;
-            try
-            {
-                List<DBParameters> objDbParam = new List<DBParameters>(){             
+            List<DBParameters> objDbParam = new List<DBParameters>(){             
                     new DBParameters(){ParameterName="p_id",parameterType=DbType.Int32,Paramvalue=id}};
-                intApprv = objDbh.InsertUsingStoreProc("sp_updateApproval", objDbParam);
-                //Sendnotification("Approvae", userName);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return objDbh.InsertUsingStoreProc("sp_updateApproval", objDbParam);
+            Sendnotification("Approvae", userName, "", id);
         }
 
         public string Reject(int pId, string userName, string pReason)
@@ -57,7 +49,7 @@ namespace BusinessAccess
             rejectStatus = objDbh.Update("Approve_Status='R',Date_Of_Approve='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "',Additional_Info='" + pReason + "'",
                                         "tbl_userDetails",
                                         "ID=" + pId);
-            //Sendnotification("Reject", userName);
+            Sendnotification("Reject", userName, pReason, pId);
             return rejectStatus;
         }
 
@@ -67,35 +59,50 @@ namespace BusinessAccess
             updStatus = objDbh.Update("Approve_Status='M',Date_Of_Approve='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "',Additional_Info='" + pAdditionalInfo + "'",
                                         "tbl_userDetails",
                                         "ID=" + pId);
-            // Sendnotification("Additional Info", userName);
+            Sendnotification("Additional Info", userName, pAdditionalInfo, pId);
             return updStatus;
-
         }
 
-        public void Sendnotification(string pStatus, string userName,string pReason)
+        public void RollBackStatus(int pId)
+        {
+            objDbh.Update("Approve_Status='N',Date_Of_Approve='',Additional_Info=''",
+                                       "tbl_userDetails",
+                                       "ID=" + pId);
+        }
+
+        public void Sendnotification(string pStatus, string userName, string pReason, int pId)
         {
             string messageBody = "";
             string subject = "";
             string redirectionUrl = "";
             SendMail objmail = new SendMail();
-
-            DataSet ds = objDbh.SelectDataWithCondition("MsgBody,MsgSubject,redirectionUrl", "tbl_MailMessage", "status='" + pStatus.ToUpper() + "'");
-
-            if (ds.Tables[0].Rows.Count > 0)
+            try
             {
-                messageBody = ds.Tables[0].Rows[0]["MsgBody"].ToString();
-                subject = ds.Tables[0].Rows[0]["MsgSubject"].ToString();
-                redirectionUrl = ds.Tables[0].Rows[0]["redirectionUrl"].ToString();
 
-                if(pReason!="")
+                DataSet ds = objDbh.SelectDataWithCondition("MsgBody,MsgSubject,redirectionUrl", "tbl_MailMessage", "status='" + pStatus.ToUpper() + "'");
+
+                if (ds.Tables[0].Rows.Count > 0)
                 {
-                    messageBody = messageBody + "<br/>" + pReason;
+                    messageBody = ds.Tables[0].Rows[0]["MsgBody"].ToString();
+                    subject = ds.Tables[0].Rows[0]["MsgSubject"].ToString();
+                    redirectionUrl = ds.Tables[0].Rows[0]["redirectionUrl"].ToString();
+
+                    if (pReason != "")
+                    {
+                        messageBody = messageBody + "<br/>" + pReason;
+                    }
+
+                    messageBody = messageBody + "Url:" + redirectionUrl;
+
+                    objmail.SendEmail(userName, subject, messageBody);
                 }
+            }
+            catch (Exception ex)
+            {
+                RollBackStatus(pId);
+                throw ex;
 
-                messageBody = messageBody + "Url:" + redirectionUrl;
-
-                objmail.SendEmail(userName, subject, messageBody);
-            }          
+            }
         }
 
         public string GetDriverImage(int id, string imageType)
